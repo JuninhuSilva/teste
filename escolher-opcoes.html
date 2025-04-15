@@ -1,0 +1,174 @@
+<!DOCTYPE html>
+<html lang="pt-PT">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Escolher Opções do Cartão NFC</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      background-color: #f4f4f4;
+      margin: 0;
+      padding: 0;
+    }
+
+    .container {
+      max-width: 600px;
+      margin: 3rem auto;
+      background: white;
+      padding: 2rem;
+      border-radius: 10px;
+      box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+    }
+
+    h1 {
+      text-align: center;
+      color: #0077cc;
+    }
+
+    label {
+      display: block;
+      margin-top: 1.5rem;
+      font-weight: bold;
+    }
+
+    select, input[type="text"] {
+      width: 100%;
+      padding: 0.8rem;
+      margin-top: 0.5rem;
+      border: 1px solid #ccc;
+      border-radius: 5px;
+    }
+
+    button {
+      margin-top: 2rem;
+      width: 100%;
+      background-color: #25d366;
+      color: white;
+      padding: 1rem;
+      font-size: 1.1rem;
+      border: none;
+      border-radius: 8px;
+      cursor: pointer;
+    }
+
+    button:hover {
+      background-color: #1ebe5d;
+    }
+
+    .link-whatsapp {
+      display: inline-block;
+      margin-top: 0.8rem;
+      font-weight: bold;
+      color: #25d366;
+      text-decoration: underline;
+    }
+
+    .info-extra {
+      color: #555;
+      font-size: 0.95rem;
+      margin-top: 1rem;
+    }
+
+    #btn-finalizar {
+      display: none;
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <h1>Escolha as opções do seu cartão</h1>
+    <form id="formulario">
+      <label for="tipo-link">Qual tipo de link deseja usar?</label>
+      <select id="tipo-link" name="tipo-link" onchange="verificarLinkEspecial()">
+        <option value="google">Google Meu Negócio</option>
+        <option value="instagram">Instagram</option>
+        <option value="facebook">Facebook</option>
+        <option value="outro">Site</option>
+        <option value="todos">Quero os 3 links (Google, Instagram, Facebook)</option>
+      </select>
+
+      <p id="aviso-extra" class="info-extra" style="display: none;">
+        Será acrescentado um pequeno valor para criação de uma página com os três links (estilo Linktree).
+      </p>
+
+      <div id="link-unico">
+        <label for="link">Cole aqui o seu link:</label>
+        <input type="text" id="link" name="link" placeholder="https://..." required>
+      </div>
+
+      <div id="links-extras" style="display: none;">
+        <label for="link-google">Link do Google Meu Negócio:</label>
+        <input type="text" id="link-google" name="link-google" placeholder="https://google.com/...">
+
+        <label for="link-instagram">Link do Instagram:</label>
+        <input type="text" id="link-instagram" name="link-instagram" placeholder="https://instagram.com/...">
+
+        <label for="link-facebook">Link do Facebook:</label>
+        <input type="text" id="link-facebook" name="link-facebook" placeholder="https://facebook.com/...">
+      </div>
+
+      <label for="observacoes">Deseja adicionar mais alguma informação?</label>
+      <input type="text" id="observacoes" name="observacoes" placeholder="Opcional">
+
+      <button type="button" onclick="mostrarPagamento()">Gerar Dados de Pagamento</button>
+
+      <div id="pagamento" style="display:none; margin-top:2rem; padding:1rem; border:1px solid #ccc; border-radius:8px; background:#f9f9f9;">
+        <h3>Detalhes para pagamento via MB WAY</h3>
+        <p><strong>Valor:</strong> <span id="valor-mbway">19.99 €</span></p>
+        <p><strong>Referência MB WAY:</strong> <span style="color:#0077cc; font-weight:bold;">915 765 792</span></p>
+        <p style="margin-top:1rem; font-size: 0.9rem; color: #333;">
+          💡 <strong>Por favor coloque o seu nome completo</strong> no descritivo do pagamento. Após o pagamento, envie o comprovativo via WhatsApp:
+        </p>
+        <a href="https://wa.me/351915765792?text=Olá,%20segue%20em%20anexo%20o%20comprovativo%20do%20pagamento%20do%20cartão%20NFC."
+           class="link-whatsapp" target="_blank">
+          Enviar Comprovativo
+        </a>
+      </div>
+
+      <button id="btn-finalizar" type="button" onclick="irParaFinal()">Finalizar Pedido</button>
+    </form>
+  </div>
+
+  <script>
+    function verificarLinkEspecial() {
+      const select = document.getElementById("tipo-link");
+      const aviso = document.getElementById("aviso-extra");
+      const campoUnico = document.getElementById("link-unico");
+      const camposExtras = document.getElementById("links-extras");
+
+      if (select.value === "todos") {
+        aviso.style.display = "block";
+        camposExtras.style.display = "block";
+        campoUnico.style.display = "none";
+      } else {
+        aviso.style.display = "none";
+        camposExtras.style.display = "none";
+        campoUnico.style.display = "block";
+      }
+    }
+
+    function mostrarPagamento() {
+      const select = document.getElementById("tipo-link");
+      const valorSpan = document.getElementById("valor-mbway");
+      const pagamentoDiv = document.getElementById("pagamento");
+      const botaoFinalizar = document.getElementById("btn-finalizar");
+
+      if (select.value === "todos") {
+        valorSpan.textContent = "29.99 €";
+      } else {
+        valorSpan.textContent = "19.99 €";
+      }
+
+      pagamentoDiv.style.display = "block";
+      botaoFinalizar.style.display = "block";
+
+      window.scrollTo({ top: document.body.scrollHeight, behavior: 'smooth' });
+    }
+
+    function irParaFinal() {
+      window.location.href = "obrigado.html";
+    }
+  </script>
+</body>
+</html>
